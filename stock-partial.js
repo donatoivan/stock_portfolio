@@ -126,7 +126,6 @@ let createPeRatio = (data, hex) => {
   });  
 }
 
-
 const apple = fetch("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=AAPL&outputsize=compact&interval=60min&apikey=F41ON15LGCFM4PR7");
 
 const google = fetch("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=GOOGL&outputsize=compact&interval=60min&apikey=F41ON15LGCFM4PR7");
@@ -136,6 +135,7 @@ const tesla = fetch("https://www.alphavantage.co/query?function=TIME_SERIES_DAIL
 const brka = fetch("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=BRK.A&outputsize=compact&interval=60min&apikey=F41ON15LGCFM4PR7");
 
 const fb = fetch("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=FB&outputsize=compact&interval=60min&apikey=F41ON15LGCFM4PR7");
+
 Promise.all([apple, google, tesla, brka, fb])
   .then((arrOfRes) => {
     arrOfRes.forEach((response) => {
@@ -173,7 +173,6 @@ const drawChart = (timeArray, dataArray, backgroundColour, xGridlines, yGridline
   canvas.setAttribute('height','200'); 
   document.querySelector('#chart-container').appendChild(canvas);
   var ctx = canvas.getContext("2d");
-
 
   var config = {
     type: 'line',
@@ -252,7 +251,7 @@ myButton.addEventListener("click", function (event) {
     createPeRatio(data, '#c475f6');   
     })
   drawChart(arrayOfDailyAndTimeArr[0][1], arrayOfDailyAndTimeArr[0][0], 'rgba(196, 117, 246, 0.6)', 
-  'rgb(196, 117, 246)', 'rgb(234, 241, 242)', 'Apple')
+            'rgb(196, 117, 246)', 'rgb(234, 241, 242)', 'Apple')
 });
 
 
@@ -278,8 +277,8 @@ myButton2.addEventListener("click", function (event) {
       createMarketCap(data, '#9c73f6');
       createPeRatio(data, '#9c73f6');
     })
-  drawChart(arrayOfDailyAndTimeArr[0][1], arrayOfDailyAndTimeArr[1][0], 'rgba(156, 115, 246, 0.6)', 'rgb(156, 115, 246', 'rgb(234, 241, 242)', 'Google')
-
+  drawChart(arrayOfDailyAndTimeArr[0][1], arrayOfDailyAndTimeArr[1][0], 'rgba(156, 115, 246, 0.6)', 
+            'rgb(156, 115, 246', 'rgb(234, 241, 242)', 'Google')
 });
    
 
