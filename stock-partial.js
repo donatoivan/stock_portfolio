@@ -1,5 +1,4 @@
-const datasets = []
-const arrayOfDailyAndTimeArr = []
+const dailyAndTimeObj = {}
 
 function formatNumber(num) {
   return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
@@ -139,30 +138,33 @@ const fb = fetch("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&s
 Promise.all([apple, google, tesla, brka, fb])
   .then((arrOfRes) => {
     arrOfRes.forEach((response) => {
-      pushUserObjects(response.json())
+      pushStockObjects(response.json())
     })
   })
 
-// function that pushes object into array
-const pushUserObjects = (json) => {
+// function that makes object within main data object
+const pushStockObjects = (json) => {
     json.then((data) => {
-    let package = []
     let daily = [];
     let timeSeriesArr = [];
+    let symbolSignifier = [];
+    let properties = {}
     let test = (data["Time Series (Daily)"]);
     const entries = Object.entries(test)
     for(let i = 0; i < 17; i ++) {
+      symbolSignifier.push(data["Meta Data"]["2. Symbol"])
       daily.push(entries[i][1]["4. close"]);
-      timeSeriesArr.push(entries[i][0])
+      timeSeriesArr.push(entries[i][0]);
     }
-    package.push(daily.reverse());
-    package.push(timeSeriesArr.reverse());
-    arrayOfDailyAndTimeArr.push(package); 
-    console.log(arrayOfDailyAndTimeArr)
-    drawChart(arrayOfDailyAndTimeArr[0][1], arrayOfDailyAndTimeArr[0][0], 'rgba(196, 117, 246, 0.6)', 
+    dailyAndTimeObj[symbolSignifier[0]] = properties;
+    properties.prices = daily.reverse();
+    properties.days = timeSeriesArr.reverse();
+    drawChart(dailyAndTimeObj["AAPL"].days, dailyAndTimeObj["AAPL"].prices, 'rgba(196, 117, 246, 0.6)', 
               'rgb(196, 117, 246)', 'rgb(234, 241, 242)', 'Apple')
   })
 }
+
+
 
 //function to draw chart
 const drawChart = (timeArray, dataArray, backgroundColour, xGridlines, yGridlines, label) => {
@@ -250,7 +252,7 @@ myButton.addEventListener("click", function (event) {
     createMarketCap(data, '#c475f6');
     createPeRatio(data, '#c475f6');   
     })
-  drawChart(arrayOfDailyAndTimeArr[0][1], arrayOfDailyAndTimeArr[0][0], 'rgba(196, 117, 246, 0.6)', 
+  drawChart(dailyAndTimeObj["AAPL"].days, dailyAndTimeObj["AAPL"].prices, 'rgba(196, 117, 246, 0.6)', 
             'rgb(196, 117, 246)', 'rgb(234, 241, 242)', 'Apple')
 });
 
@@ -277,7 +279,7 @@ myButton2.addEventListener("click", function (event) {
       createMarketCap(data, '#9c73f6');
       createPeRatio(data, '#9c73f6');
     })
-  drawChart(arrayOfDailyAndTimeArr[0][1], arrayOfDailyAndTimeArr[1][0], 'rgba(156, 115, 246, 0.6)', 
+  drawChart(dailyAndTimeObj["GOOGL"].days, dailyAndTimeObj["GOOGL"].prices, 'rgba(156, 115, 246, 0.6)', 
             'rgb(156, 115, 246', 'rgb(234, 241, 242)', 'Google')
 });
    
@@ -304,7 +306,7 @@ myButton3.addEventListener("click", function (event) {
     createMarketCap(data, '#7681f6');
     createPeRatio(data, '#7681f6');      
     })
-  drawChart(arrayOfDailyAndTimeArr[0][1], arrayOfDailyAndTimeArr[2][0], 'rgba(118, 129, 246, 0.6)', 
+  drawChart(dailyAndTimeObj["TSLA"].days, dailyAndTimeObj["TSLA"].prices, 'rgba(118, 129, 246, 0.6)', 
             'rgb(118, 129, 246)', 'rgb(234, 241, 242)', 'Tesla' )
 });
 
@@ -330,7 +332,7 @@ myButton4.addEventListener("click", function (event) {
       createMarketCap(data, '#3996b2');
       createPeRatio(data, '#3996b2');     
     }) 
-  drawChart(arrayOfDailyAndTimeArr[0][1], arrayOfDailyAndTimeArr[3][0], 'rgba(57, 150, 178, 0.6)', 
+  drawChart(dailyAndTimeObj["BRK.A"].days, dailyAndTimeObj["BRK.A"].prices, 'rgba(57, 150, 178, 0.6)', 
             'rgb(57,150,178)', 'rgb(234, 241, 242)', 'Berkshire Hathaway')
 });
       
@@ -358,6 +360,6 @@ myButton5.addEventListener("click", function (event) {
       createMarketCap(data, '#2a69fc');
       createPeRatio(data, '#2a69fc');     
     })
-  drawChart(arrayOfDailyAndTimeArr[0][1], arrayOfDailyAndTimeArr[4][0], 'rgba(42, 105, 252, 0.6)', 
+  drawChart(dailyAndTimeObj["FB"].days, dailyAndTimeObj["FB"].prices, 'rgba(42, 105, 252, 0.6)', 
             'rgb(42, 105, 252)', 'rgb(234, 241, 242)', 'Facebook' )
 });
